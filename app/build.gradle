@@ -83,7 +83,7 @@ dependencies {
 
 
     // Message Bar Compose
-    implementation 'com.github.stevdza-san:MessageBarCompose:1.0.5'
+        implementation 'com.github.stevdza-san:MessageBarCompose:1.0.5'
 
 
     // Desugar JDK

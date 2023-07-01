@@ -3,6 +3,7 @@ package com.example.vetmed.feature_authentication.presentation.login
 import android.accounts.AccountManager
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -14,6 +15,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.vetmed.feature_authentication.presentation.util.Constants.CLIENT_ID
 import com.example.vetmed.ui.theme.VetMedTheme
+import com.stevdzasan.messagebar.ContentWithMessageBar
+import com.stevdzasan.messagebar.MessageBarState
 import com.stevdzasan.onetap.OneTapSignInState
 import com.stevdzasan.onetap.OneTapSignInWithGoogle
 
@@ -24,6 +27,7 @@ import com.stevdzasan.onetap.OneTapSignInWithGoogle
 fun LoginScreen(
     oneTapState: OneTapSignInState,
     googleButtonLoadingState: Boolean,
+    messageState: MessageBarState,
     onSignInButtonClick: () -> Unit
 ) {
     val context = LocalContext.current
@@ -39,30 +43,29 @@ fun LoginScreen(
 
     Scaffold(
         content = {
-            LoginContent(
-                loadingState = googleButtonLoadingState,
-                onSignInButtonClick = {
-                    val accountManager = AccountManager.get(context)
-                    val accounts = accountManager.getAccountsByType(null)
-                    val hasGoogleAccount = accounts.any { it.type == "com.google" }
-
-                    if (!hasGoogleAccount) {
-                        val intent = AccountManager.newChooseAccountIntent(
-                            null,
-                            null,
-                            arrayOf("com.google"),
-                            null,
-                            null,
-                            null,
-                            null
-                        )
-                        chosenAccount.launch(intent)
-                    } else {
-                        onSignInButtonClick()
+            ContentWithMessageBar(messageBarState = messageState) {
+                LoginContent(
+                    loadingState = googleButtonLoadingState,
+                    onSignInButtonClick = {
+                        if (hasGoogleAccount(context = context)) {
+                            val intent = AccountManager.newChooseAccountIntent(
+                                null,
+                                null,
+                                arrayOf("com.google"),
+                                null,
+                                null,
+                                null,
+                                null
+                            )
+                            chosenAccount.launch(intent)
+                        } else {
+                            onSignInButtonClick()
+                        }
                     }
-                }
-            )
+                )
+            }
         }
+
     )
 
     OneTapSignInWithGoogle(
@@ -70,20 +73,33 @@ fun LoginScreen(
         clientId = CLIENT_ID,
         onTokenIdReceived = { tokenId ->
             Log.d("AUTH", tokenId)
+            messageState.addSuccess("Successfully Authenticated!")
         },
         onDialogDismissed = { message ->
             Log.d("AUTH", message)
+            messageState.addError(Exception(message))
         }
     )
 
 
 }
 
+
+private fun hasGoogleAccount(context: Context): Boolean {
+    val accountManager = AccountManager.get(context)
+    val accounts = accountManager.getAccountsByType(null)
+    return accounts.any { it.type == "com.google" }
+}
+
 @Preview
 @Composable
 fun LoginScreenPreview() {
     VetMedTheme {
-        LoginScreen(oneTapState = OneTapSignInState(), googleButtonLoadingState = false) {
+        LoginScreen(
+            oneTapState = OneTapSignInState(),
+            messageState = MessageBarState(),
+            googleButtonLoadingState = false
+        ) {
 
         }
 
