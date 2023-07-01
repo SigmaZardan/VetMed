@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.vetmed.feature_authentication.presentation.login.LoginScreen
+import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
 
 
@@ -28,9 +29,11 @@ fun NavGraphBuilder.loginRoute(
 ) {
     composable(route = Screen.Login.route) {
         val oneTapSignInState = rememberOneTapSignInState()
+        val messageState = rememberMessageBarState()
 
         LoginScreen(
             oneTapState = oneTapSignInState,
+            messageState = messageState,
             googleButtonLoadingState = oneTapSignInState.opened
         ) {
             oneTapSignInState.open()
