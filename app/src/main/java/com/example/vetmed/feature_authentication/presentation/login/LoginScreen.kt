@@ -28,7 +28,9 @@ fun LoginScreen(
     oneTapState: OneTapSignInState,
     googleButtonLoadingState: Boolean,
     messageState: MessageBarState,
-    onSignInButtonClick: () -> Unit
+    onSignInButtonClick: () -> Unit,
+    onTokenIdReceived: (String) -> Unit,
+    onDialogDismissed: (String) -> Unit
 ) {
     val context = LocalContext.current
     val chosenAccount =
@@ -72,11 +74,11 @@ fun LoginScreen(
         state = oneTapState,
         clientId = CLIENT_ID,
         onTokenIdReceived = { tokenId ->
-            Log.d("AUTH", tokenId)
-            messageState.addSuccess("Successfully Authenticated!")
+            Log.d("Auth", tokenId)
+            onTokenIdReceived(tokenId)
         },
         onDialogDismissed = { message ->
-            Log.d("AUTH", message)
+            onDialogDismissed(message)
             messageState.addError(Exception(message))
         }
     )
@@ -98,10 +100,11 @@ fun LoginScreenPreview() {
         LoginScreen(
             oneTapState = OneTapSignInState(),
             messageState = MessageBarState(),
-            googleButtonLoadingState = false
-        ) {
-
-        }
+            googleButtonLoadingState = false,
+            onSignInButtonClick = {},
+            onDialogDismissed = {},
+            onTokenIdReceived = {}
+        )
 
     }
 }
