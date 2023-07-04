@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.vetmed.feature_authentication.presentation.util.Constants.APP_ID
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.Credentials
-import io.realm.kotlin.mongodb.GoogleAuthType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,7 +27,7 @@ class LogInViewModel : ViewModel() {
             try {
                 val result = withContext(Dispatchers.IO) {
                     App.create(APP_ID).login(
-                        Credentials.google(tokenId, GoogleAuthType.ID_TOKEN)
+                        Credentials.jwt(tokenId)
                     ).loggedIn
                 }
                 withContext(Dispatchers.Main) {
