@@ -49,7 +49,7 @@ fun LoginScreen(
                 LoginContent(
                     loadingState = googleButtonLoadingState,
                     onSignInButtonClick = {
-                        if (hasGoogleAccount(context = context)) {
+                        if (!hasGoogleAccount(context = context)) {
                             val intent = AccountManager.newChooseAccountIntent(
                                 null,
                                 null,
