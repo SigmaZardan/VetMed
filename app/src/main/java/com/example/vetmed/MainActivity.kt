@@ -11,7 +11,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.example.vetmed.core.util.Screen
 import com.example.vetmed.core.util.SetupNavGraph
+import com.example.vetmed.feature_authentication.presentation.util.Constants.APP_ID
 import com.example.vetmed.ui.theme.VetMedTheme
+import io.realm.kotlin.mongodb.App
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,12 +28,19 @@ class MainActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
                     SetupNavGraph(
-                        startDestination = Screen.Login.route,
+                        startDestination = getStartDestination(),
                         navController = navController
                     )
                 }
             }
         }
     }
+
+    private fun getStartDestination(): String {
+        val user = App.create(APP_ID).currentUser
+
+        return if (user != null && user.loggedIn) Screen.Home.route else Screen.Login.route
+    }
+
 }
 

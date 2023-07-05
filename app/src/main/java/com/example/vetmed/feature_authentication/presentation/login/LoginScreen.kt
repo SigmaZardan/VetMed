@@ -5,12 +5,14 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.util.Log
+import android.view.Gravity
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.vetmed.feature_authentication.presentation.util.Constants.CLIENT_ID
@@ -25,22 +27,25 @@ import com.stevdzasan.onetap.OneTapSignInWithGoogle
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
+    authenticated: Boolean,
     oneTapState: OneTapSignInState,
     googleButtonLoadingState: Boolean,
     messageState: MessageBarState,
     onSignInButtonClick: () -> Unit,
     onTokenIdReceived: (String) -> Unit,
-    onDialogDismissed: (String) -> Unit
+    onDialogDismissed: (String) -> Unit,
+    navigateToHome: () -> Unit
 ) {
     val context = LocalContext.current
     val chosenAccount =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
+            val toast = if (result.resultCode == Activity.RESULT_OK) {
                 Toast.makeText(context, "Successfully added google account", Toast.LENGTH_SHORT)
-                    .show()
             } else {
-                Toast.makeText(context, "Unable to add google account", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Unable to add google account", Toast.LENGTH_SHORT)
             }
+            toast.setGravity(Gravity.TOP or Gravity.START, 0, 0)
+            toast.show()
         }
 
     Scaffold(
@@ -82,6 +87,11 @@ fun LoginScreen(
             messageState.addError(Exception(message))
         }
     )
+    LaunchedEffect( authenticated) {
+        if (authenticated) {
+            navigateToHome()
+        }
+    }
 
 
 }
@@ -98,12 +108,14 @@ private fun hasGoogleAccount(context: Context): Boolean {
 fun LoginScreenPreview() {
     VetMedTheme {
         LoginScreen(
+            authenticated =false,
             oneTapState = OneTapSignInState(),
             messageState = MessageBarState(),
             googleButtonLoadingState = false,
             onSignInButtonClick = {},
             onDialogDismissed = {},
-            onTokenIdReceived = {}
+            onTokenIdReceived = {},
+            navigateToHome = {}
         )
 
     }
