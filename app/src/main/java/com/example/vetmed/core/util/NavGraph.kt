@@ -21,9 +21,7 @@ import com.example.vetmed.feature_authentication.presentation.util.Constants.APP
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
 import io.realm.kotlin.mongodb.App
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 
@@ -84,7 +82,13 @@ fun NavGraphBuilder.loginRoute(
                 messageState.addError(Exception(message))
                 loginViewModel.setLoading(false)
             },
-            navigateToHome = navigateToHome
+            navigateToHome = navigateToHome,
+            onGoogleAccountAdditionSuccess = {
+                messageState.addSuccess("Google Account Added Successfully!")
+            },
+            onGoogleAccountAdditionUnSuccess = {
+                messageState.addError(Exception("Unable to add Google Account!"))
+            }
         )
     }
 }

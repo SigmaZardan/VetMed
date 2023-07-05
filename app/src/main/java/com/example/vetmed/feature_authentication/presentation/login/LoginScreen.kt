@@ -34,18 +34,21 @@ fun LoginScreen(
     onSignInButtonClick: () -> Unit,
     onTokenIdReceived: (String) -> Unit,
     onDialogDismissed: (String) -> Unit,
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
+    onGoogleAccountAdditionSuccess: () -> Unit,
+    onGoogleAccountAdditionUnSuccess: () -> Unit,
+
 ) {
     val context = LocalContext.current
     val chosenAccount =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            val toast = if (result.resultCode == Activity.RESULT_OK) {
-                Toast.makeText(context, "Successfully added google account", Toast.LENGTH_SHORT)
+            if (result.resultCode == Activity.RESULT_OK) {
+//                Toast.makeText(context, "Successfully added google account", Toast.LENGTH_SHORT)
+                onGoogleAccountAdditionSuccess()
+
             } else {
-                Toast.makeText(context, "Unable to add google account", Toast.LENGTH_SHORT)
-            }
-            toast.setGravity(Gravity.TOP or Gravity.START, 0, 0)
-            toast.show()
+                onGoogleAccountAdditionUnSuccess()}
+
         }
 
     Scaffold(
@@ -115,7 +118,9 @@ fun LoginScreenPreview() {
             onSignInButtonClick = {},
             onDialogDismissed = {},
             onTokenIdReceived = {},
-            navigateToHome = {}
+            navigateToHome = {},
+            onGoogleAccountAdditionSuccess = {},
+            onGoogleAccountAdditionUnSuccess = {}
         )
 
     }
