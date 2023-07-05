@@ -7,10 +7,13 @@ import com.example.vetmed.feature_authentication.presentation.util.Constants.APP
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.Credentials
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class LogInViewModel : ViewModel() {
+    var authenticated = mutableStateOf(false)
+        private set
     var loadingState = mutableStateOf(false)
         private set
 
@@ -20,9 +23,10 @@ class LogInViewModel : ViewModel() {
 
     fun signInWithGoogle(
         tokenId: String,
-        onSuccess: (Boolean) -> Unit,
-        onError: (Exception) -> Unit
-    ) {
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit,
+
+        ) {
         viewModelScope.launch {
             try {
                 val result = withContext(Dispatchers.IO) {
@@ -31,7 +35,13 @@ class LogInViewModel : ViewModel() {
                     ).loggedIn
                 }
                 withContext(Dispatchers.Main) {
-                    onSuccess(result)
+                    if (result) {
+                        onSuccess()
+                        delay(600)
+                        authenticated.value = true
+                    }
+
+
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
