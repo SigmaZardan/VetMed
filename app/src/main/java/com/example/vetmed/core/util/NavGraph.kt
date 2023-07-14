@@ -1,15 +1,10 @@
 package com.example.vetmed.core.util
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -17,12 +12,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.vetmed.feature_authentication.presentation.login.LoginScreen
 import com.example.vetmed.feature_authentication.presentation.login.LogInViewModel
-import com.example.vetmed.feature_authentication.presentation.util.Constants.APP_ID
+import com.example.vetmed.feature_home.presentation.home.HomeScreen
+import com.example.vetmed.feature_home.presentation.home.HomeViewModel
+import com.example.vetmed.feature_home.presentation.home.components.DisplayAlertDialog
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
-import io.realm.kotlin.mongodb.App
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 @Composable
@@ -34,7 +28,6 @@ fun SetupNavGraph(
         startDestination = startDestination,
         navController = navController
     ) {
-
         loginRoute(
             navigateToHome = {
                 navController.popBackStack()
@@ -42,7 +35,12 @@ fun SetupNavGraph(
             }
         )
         signupRoute()
-        homeRoute()
+        homeRoute(
+            navigateToLogIn = {
+                navController.popBackStack()
+                navController.navigate(Screen.Login.route)
+            }
+        )
     }
 }
 
@@ -88,7 +86,7 @@ fun NavGraphBuilder.loginRoute(
             },
             onGoogleAccountAdditionUnSuccess = {
                 messageState.addError(Exception("Unable to add Google Account!"))
-            }
+            },
         )
     }
 }
@@ -99,28 +97,31 @@ fun NavGraphBuilder.signupRoute() {
     }
 }
 
-fun NavGraphBuilder.homeRoute() {
+fun NavGraphBuilder.homeRoute(
+    navigateToLogIn: () -> Unit
+) {
     composable(route = Screen.Home.route) {
-        val scope = rememberCoroutineScope()
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Button(
-                onClick = {
-                    val user = App.create(APP_ID).currentUser
-                    scope.launch(Dispatchers.IO) {
-                        user?.logOut()
-                    }
+        val homeViewModel: HomeViewModel = viewModel()
+        val signedOut by homeViewModel.loggedOut
+        var signOutDialogOpened by remember { mutableStateOf(false) }
+        HomeScreen(
+            signedOut = signedOut,
+            onLogOutButtonClick = {
+                signOutDialogOpened = true
+            },
+            navigateToLogIn = navigateToLogIn
+        )
 
-                }
-            ) {
-                Text(text = "LogOut")
+        DisplayAlertDialog(
+            title = "Sign Out",
+            message = "Are you sure want to Sign Out from your Google Account?",
+            dialogOpened = signOutDialogOpened,
+            onYesClicked = {
+                homeViewModel.logOut()
+            },
+            onDialogClosed = {
             }
-
-
-        }
+        )
     }
 }
+
