@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">VetMed</string>
+    <string name="profile_picture">profile picture</string>
+    <string name="arrow_head">Arrow Head</string>
 </resources>
