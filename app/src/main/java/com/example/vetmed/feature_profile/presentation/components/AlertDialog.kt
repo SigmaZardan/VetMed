@@ -1,4 +1,4 @@
-package com.example.vetmed.feature_home.presentation.home.components
+package com.example.vetmed.feature_profile.presentation.components
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
