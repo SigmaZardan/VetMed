@@ -61,15 +61,16 @@ fun ProfileScreen(
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable {
-                        onLogOutClick()
-                    }
+
                     .padding(bottom = 10.dp),
                 shadowElevation = 3.dp
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .clickable {
+                            onLogOutClick()
+                        }
                         .padding(10.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
