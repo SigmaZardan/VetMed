@@ -35,14 +35,15 @@ fun OptionRowItem(
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
-                onOptionClicked()
-            }.padding(bottom = 10.dp),
+            .padding(bottom = 10.dp),
        shadowElevation = 3.dp
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .clickable {
+                    onOptionClicked()
+                }
                 .padding(10.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
