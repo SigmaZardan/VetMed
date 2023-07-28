@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
@@ -33,17 +34,15 @@ fun ProfileAndNameSection(
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-//        AsyncImage(
-//            model = ImageRequest.Builder(LocalContext.current)
-//                .data(profilePicUrl)
-//                .crossfade(true)
-//                .build(),
-//            placeholder = painterResource(R.drawable.default_profile_picture),
-//            contentDescription = stringResource(R.string.profile_picture),
-//            contentScale = ContentScale.Crop,
-//            modifier = Modifier.clip(CircleShape)
-//        )
-        Image(painter = painterResource(id = R.drawable.default_profile_picture), contentDescription = "profile picture",
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(profilePicUrl)
+                .crossfade(true)
+                .build(),
+            placeholder = painterResource(R.drawable.default_profile_picture),
+            contentDescription = stringResource(R.string.profile_picture),
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.clip(CircleShape).size(60.dp),
         )
         Spacer(modifier = Modifier.width(16.dp))
         Column {

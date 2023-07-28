@@ -42,12 +42,13 @@ fun NavGraphBuilder.profileRoute(
         val profileViewModel: ProfileViewModel = viewModel()
         val signedOut by profileViewModel.loggedOut
         var signOutDialogOpened by remember { mutableStateOf(false) }
+        val user = profileViewModel.getUserData()
 
         ProfileScreen(
             navController = navController,
-            profilePicUrl = "asfsafasfa",
-            userName = "Bibek bhujel",
-            email = "bibekbhujel077@gmail.com",
+            profilePicUrl = "${user.picture}",
+            userName = "${user.name}",
+            email = "${user.email}",
             signedOut = signedOut,
             onLogOutClick = {
                 signOutDialogOpened = true
