@@ -9,8 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.vetmed.feature_authentication.presentation.login.LoginScreen
 import com.example.vetmed.feature_authentication.presentation.login.LogInViewModel
-import com.example.vetmed.feature_home.presentation.home.HomeScreen
-import com.example.vetmed.feature_home.presentation.home.HomeViewModel
+import com.example.vetmed.feature_home.presentation.home.HomeBase
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
 
@@ -98,7 +97,7 @@ fun NavGraphBuilder.homeRoute(
 ) {
     composable(route = Screen.Home.route) {
 
-        HomeScreen(
+        HomeBase(
             navigateToLogIn = navigateToLogIn
         )
     }
