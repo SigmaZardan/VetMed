@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.example.vetmed.core.util.Screen
-import com.example.vetmed.core.util.SetupNavGraph
+import com.example.vetmed.core.util.navgraph.SetupNavGraph
 import com.example.vetmed.feature_authentication.presentation.util.Constants.APP_ID
 import com.example.vetmed.ui.theme.VetMedTheme
 import io.realm.kotlin.mongodb.App

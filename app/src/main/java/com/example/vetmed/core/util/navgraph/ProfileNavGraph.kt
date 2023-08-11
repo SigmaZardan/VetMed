@@ -1,4 +1,4 @@
-package com.example.vetmed.core.util
+package com.example.vetmed.core.util.navgraph
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -11,6 +11,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.vetmed.core.util.ProfileOptions
+import com.example.vetmed.core.util.Screen
 import com.example.vetmed.feature_profile.presentation.components.DisplayAlertDialog
 import com.example.vetmed.feature_profile.presentation.ProfileScreen
 import com.example.vetmed.feature_profile.presentation.ProfileViewModel
@@ -73,20 +75,20 @@ fun NavGraphBuilder.profileRoute(
 }
 
 fun NavGraphBuilder.share() {
-    composable(route = Options.Share.route) {
+    composable(route = ProfileOptions.Share.route) {
         Text("share things for the wellfare of the society")
     }
 
 }
 
 fun NavGraphBuilder.aboutUs() {
-    composable(route = Options.AboutUs.route) {
+    composable(route = ProfileOptions.AboutUs.route) {
         Text("about us and  other things as well")
     }
 }
 
 fun NavGraphBuilder.privacyPolicy() {
-    composable(route = Options.PrivacyPolicy.route) {
+    composable(route = ProfileOptions.PrivacyPolicy.route) {
         Text("What is the privacy policy here my boy ???? can you give me some examples here and there")
     }
 }
