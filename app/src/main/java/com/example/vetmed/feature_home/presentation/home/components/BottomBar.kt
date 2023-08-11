@@ -24,7 +24,9 @@ import com.example.vetmed.core.util.BottomBarScreen
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(
         BottomBarScreen.Home,
+        BottomBarScreen.Animal,
         BottomBarScreen.Profile,
+
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination

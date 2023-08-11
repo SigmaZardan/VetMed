@@ -4,7 +4,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import com.example.vetmed.core.util.Options
+import com.example.vetmed.core.util.ProfileOptions
 
 
 @Composable
@@ -12,9 +12,9 @@ fun AccountManagementBlock(
     navController: NavHostController
 ) {
     val options = listOf(
-        Options.Share,
-        Options.AboutUs,
-        Options.PrivacyPolicy,
+        ProfileOptions.Share,
+        ProfileOptions.AboutUs,
+        ProfileOptions.PrivacyPolicy,
     )
     LazyColumn {
         items(options) { option ->
