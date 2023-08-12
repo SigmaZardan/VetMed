@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.vetmed.feature_authentication.presentation.util.Constants
 import com.example.vetmed.feature_profile.domain.model.User
 import com.google.gson.Gson
 import io.realm.kotlin.mongodb.App
