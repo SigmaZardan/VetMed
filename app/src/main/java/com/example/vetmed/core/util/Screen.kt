@@ -7,4 +7,5 @@ sealed class Screen(val route: String) {
     object Profile: Screen(route = "profile_screen")
     object Animal: Screen(route = "animal_screen")
     object Vet: Screen(route = "vet_screen")
+    object AddAnimal: Screen(route = "add_animal_screen")
 }
