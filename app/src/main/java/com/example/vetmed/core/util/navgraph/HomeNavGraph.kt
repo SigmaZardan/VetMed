@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import com.example.vetmed.core.util.BottomBarScreen
 import com.example.vetmed.feature_animal.presentation.AnimalBase
 import com.example.vetmed.feature_profile.presentation.ProfileBase
+import com.example.vetmed.feature_vet.presentation.VetBase
 
 @Composable
 fun HomeNavGraph(navController: NavHostController, navigateToLogIn: () -> Unit) {
@@ -20,6 +21,7 @@ fun HomeNavGraph(navController: NavHostController, navigateToLogIn: () -> Unit) 
         startDestination = BottomBarScreen.Home.route
     ) {
         home()
+        vetBase()
         animalBase()
         profileBase(navigateToLogIn = navigateToLogIn)
 
@@ -38,6 +40,13 @@ fun NavGraphBuilder.home() {
     }
 
 }
+
+fun NavGraphBuilder.vetBase() {
+    composable(route = BottomBarScreen.Vet.route) {
+        VetBase()
+    }
+}
+
 
 fun NavGraphBuilder.animalBase(
 ) {
