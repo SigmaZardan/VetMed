@@ -16,6 +16,4 @@ class Animal : RealmObject {
     var description: String = ""
     var images: RealmList<String> = realmListOf()
     var date: RealmInstant = RealmInstant.from(System.currentTimeMillis(), 0)
-
-
 }
