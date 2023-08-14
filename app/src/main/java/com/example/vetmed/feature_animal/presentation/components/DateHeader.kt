@@ -1,5 +1,6 @@
 package com.example.vetmed.feature_animal.presentation.components
 
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -66,7 +67,7 @@ fun DateHeader(localDate: LocalDate) {
     }
 }
 
-@Preview
+@Preview()
 @Composable
 fun DateHeaderPreview() {
     VetMedTheme {
