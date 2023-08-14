@@ -1,5 +1,6 @@
 package com.example.vetmed.feature_animal.presentation.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -29,12 +30,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.vetmed.feature_animal.domain.model.Animal
 import com.example.vetmed.ui.theme.Elevation
+import io.realm.kotlin.ext.realmListOf
 import toInstant
 
 @Composable
 fun AnimalHolder(animal: Animal, onHolderClick: (String) -> Unit) {
     var componentHeight by remember { mutableStateOf(0.dp) }
     val localDensity = LocalDensity.current
+    var galleryOpened by remember { mutableStateOf(false) }
 
     Row(
         modifier = Modifier.clickable(
@@ -69,6 +72,22 @@ fun AnimalHolder(animal: Animal, onHolderClick: (String) -> Unit) {
                     maxLines = 4,
                     overflow = TextOverflow.Ellipsis,
                 )
+
+                if (animal.images.isNotEmpty()) {
+                    ShowGalleryButton(
+                        galleryOpened = galleryOpened,
+                        onClick = {
+                            galleryOpened = !galleryOpened
+                        }
+                    )
+                }
+
+                AnimatedVisibility(visible = galleryOpened) {
+                    Column(Modifier.padding(all = 14.dp)) {
+                        AnimalGallery(images = animal.images)
+                    }
+
+                }
             }
         }
     }
@@ -80,6 +99,7 @@ fun AnimalHolder(animal: Animal, onHolderClick: (String) -> Unit) {
 fun AnimalHolderPreview() {
     AnimalHolder(animal = Animal().apply {
         animalName = "Nani"
+        images = realmListOf(" ", " ", " ")
         description =
             "It has two beautiful eyes, adorably tiny paws, sharp claws, and two perky ears which are very sensitive to sounds. It has a tiny body covered with smooth fur and it has a furry tail as well. Cats have an adorable face with a tiny nose, a big mouth and a few whiskers under its nose."
     }, onHolderClick = {})
