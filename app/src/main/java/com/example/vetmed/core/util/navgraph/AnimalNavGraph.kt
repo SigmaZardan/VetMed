@@ -7,6 +7,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.vetmed.core.util.Screen
+import com.example.vetmed.feature_animal.presentation.AddAnimal
+import com.example.vetmed.feature_animal.presentation.AnimalScreen
 
 
 @Composable
@@ -15,12 +17,29 @@ fun AnimalNavGraph(navController: NavHostController) {
         navController = navController,
         startDestination = Screen.Animal.route
     ) {
-        animalRoute()
+        animalRoute(navigateToAddAnimalScreen = {
+            navController.popBackStack()
+            navController.navigate(Screen.AddAnimal.route)
+        })
+        addAnimalRoute()
     }
 }
 
-fun NavGraphBuilder.animalRoute() {
+fun NavGraphBuilder.animalRoute(
+    navigateToAddAnimalScreen: () -> Unit
+) {
     composable(route = Screen.Animal.route) {
-        Text("This is section for adding animal informations")
+        AnimalScreen(
+            navigateToAddAnimalScreen = navigateToAddAnimalScreen
+        )
+    }
+}
+
+
+fun NavGraphBuilder.addAnimalRoute(
+
+) {
+    composable(route = Screen.AddAnimal.route) {
+        AddAnimal()
     }
 }

@@ -7,23 +7,17 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.example.vetmed.core.util.navgraph.AnimalNavGraph
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-
-fun AnimalBase(
-) {
-    val navController: NavHostController = rememberNavController()
+fun AddAnimal() {
     Scaffold(
         modifier = Modifier.background(MaterialTheme.colorScheme.surface).statusBarsPadding().navigationBarsPadding(),
-
     ) {
-        AnimalNavGraph(navController = navController)
+        Text("This is the add animal screen ")
     }
 }
