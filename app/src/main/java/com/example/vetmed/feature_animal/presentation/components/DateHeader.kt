@@ -67,10 +67,9 @@ fun DateHeader(localDate: LocalDate) {
     }
 }
 
-@Preview()
+@Preview(showBackground = true)
 @Composable
 fun DateHeaderPreview() {
-    VetMedTheme {
         DateHeader(localDate = LocalDate.now())
-    }
+
 }
