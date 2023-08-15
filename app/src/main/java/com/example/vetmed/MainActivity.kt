@@ -13,6 +13,7 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import com.example.vetmed.core.util.Screen
 import com.example.vetmed.core.util.navgraph.SetupNavGraph
+import com.example.vetmed.feature_animal.data.repository.MongoDB
 import com.example.vetmed.feature_authentication.presentation.util.Constants.APP_ID
 import com.example.vetmed.ui.theme.VetMedTheme
 import io.realm.kotlin.mongodb.App
@@ -22,6 +23,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
             VetMedTheme() {
                 // A surface container using the 'background' color from the theme

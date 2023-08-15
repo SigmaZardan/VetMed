@@ -5,12 +5,11 @@ import io.realm.kotlin.types.RealmInstant
 import io.realm.kotlin.types.RealmList
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.PrimaryKey
-import org.mongodb.kbson.BsonObjectId
 import org.mongodb.kbson.ObjectId
 
-class Animal : RealmObject {
+open class Animal : RealmObject {
     @PrimaryKey
-    var _id: ObjectId = BsonObjectId.invoke()
+    var _id: ObjectId = ObjectId()
     var ownerId: String = ""
     var animalName: String = ""
     var description: String = ""
