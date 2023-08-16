@@ -103,9 +103,6 @@ fun NavGraphBuilder.homeRoute(
         HomeBase(
             navigateToLogIn = navigateToLogIn
         )
-        LaunchedEffect(key1 = null) {
-            MongoDB.configureRealm()
-        }
     }
 }
 

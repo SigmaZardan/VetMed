@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun EmptyPage(
-    title: String = "No Animals",
-    subtitle: String = "Write About Your Animal"
+    title: String = "No Animals Found",
+    subtitle: String = "Add Your Animal"
 ) {
     Column(
         modifier = Modifier

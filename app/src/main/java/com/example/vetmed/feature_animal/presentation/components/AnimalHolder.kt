@@ -52,7 +52,7 @@ fun AnimalHolder(animal: Animal, onHolderClick: (String) -> Unit) {
             modifier = Modifier
                 .width(2.dp)
                 .height(componentHeight + 14.dp),
-            tonalElevation = Elevation.Level1
+            tonalElevation = Elevation.Level3,
         ) {}
         Spacer(modifier = Modifier.width(20.dp))
         Surface(

@@ -2,12 +2,21 @@ package com.example.vetmed.feature_profile.presentation
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -24,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.vetmed.feature_profile.presentation.components.AccountManagementBlock
+import com.example.vetmed.feature_profile.presentation.components.LogoutButton
 import com.example.vetmed.feature_profile.presentation.components.ProfileAndNameSection
 import com.example.vetmed.ui.theme.VetMedTheme
 
@@ -49,7 +59,8 @@ fun ProfileScreen(
 
         ) {
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier
+                    .padding(16.dp)
             ) {
                 ProfileAndNameSection(
                     profilePicUrl = profilePicUrl,
@@ -62,31 +73,17 @@ fun ProfileScreen(
                     modifier = Modifier.padding(vertical = 16.dp)
                 )
 
-                AccountManagementBlock(navController = navController)
-
-
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-
-                        .padding(bottom = 10.dp),
-                    shadowElevation = 3.dp
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(10.dp)
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                onLogOutClick()
-                            }
-                            .padding(10.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = "LogOut",
-                            style = TextStyle(fontSize = MaterialTheme.typography.bodyMedium.fontSize)
-                        )
+                    item {
+                        AccountManagementBlock(navController = navController)
                     }
+                    item {
+                        LogoutButton(onLogOutClick = onLogOutClick)
+                    }
+
                 }
                 LaunchedEffect(signedOut) {
                     if (signedOut) {
@@ -96,7 +93,7 @@ fun ProfileScreen(
 
             }
         }
-        }
+    }
 
 
 }
