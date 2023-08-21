@@ -21,7 +21,7 @@ class LogInViewModel : ViewModel() {
         loadingState.value = loading
     }
 
-    fun signInWithGoogle(
+    fun signInWithMongoAtlas(
         tokenId: String,
         onSuccess: () -> Unit,
         onError: (Exception) -> Unit,
