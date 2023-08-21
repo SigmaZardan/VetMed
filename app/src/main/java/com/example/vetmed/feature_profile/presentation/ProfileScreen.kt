@@ -35,6 +35,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.vetmed.feature_profile.presentation.components.AccountManagementBlock
 import com.example.vetmed.feature_profile.presentation.components.LogoutButton
 import com.example.vetmed.feature_profile.presentation.components.ProfileAndNameSection
+import com.example.vetmed.ui.theme.Elevation
 import com.example.vetmed.ui.theme.VetMedTheme
 
 
@@ -55,7 +56,7 @@ fun ProfileScreen(
     ) {
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
+            color = MaterialTheme.colorScheme.background,
 
         ) {
             Column(

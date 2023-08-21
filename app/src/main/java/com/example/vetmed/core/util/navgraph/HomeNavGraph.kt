@@ -3,8 +3,10 @@ package com.example.vetmed.core.util.navgraph
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.TextStyle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -35,7 +37,11 @@ fun NavGraphBuilder.home() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("This is the home screen where the list of veterinarians should be displayed")
+            Text(
+                "This is the home screen where the list of veterinarians should be displayed",
+                style = TextStyle(fontSize = MaterialTheme.typography.bodyMedium.fontSize),
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
     }
 
@@ -54,7 +60,6 @@ fun NavGraphBuilder.animalBase(
         AnimalBase()
     }
 }
-
 
 
 fun NavGraphBuilder.profileBase(

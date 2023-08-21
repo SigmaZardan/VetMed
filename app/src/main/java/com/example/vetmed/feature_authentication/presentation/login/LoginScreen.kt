@@ -22,6 +22,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.vetmed.feature_authentication.presentation.util.Constants.CLIENT_ID
 import com.example.vetmed.ui.theme.VetMedTheme
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.stevdzasan.messagebar.ContentWithMessageBar
 import com.stevdzasan.messagebar.MessageBarState
 import com.stevdzasan.onetap.OneTapSignInState
@@ -37,7 +39,8 @@ fun LoginScreen(
     googleButtonLoadingState: Boolean,
     messageState: MessageBarState,
     onSignInButtonClick: () -> Unit,
-    onTokenIdReceived: (String) -> Unit,
+    onSuccessfulFirebaseSignIn: (String) -> Unit,
+    onFailedFirebaseSignIn: (Exception) -> Unit,
     onDialogDismissed: (String) -> Unit,
     navigateToHome: () -> Unit,
     onGoogleAccountAdditionSuccess: () -> Unit,
@@ -51,12 +54,16 @@ fun LoginScreen(
                 onGoogleAccountAdditionSuccess()
 
             } else {
-                onGoogleAccountAdditionUnSuccess()}
+                onGoogleAccountAdditionUnSuccess()
+            }
 
         }
 
     Scaffold(
-        modifier = Modifier.background(MaterialTheme.colorScheme.surface).statusBarsPadding().navigationBarsPadding(),
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.surface)
+            .statusBarsPadding()
+            .navigationBarsPadding(),
         content = {
             ContentWithMessageBar(messageBarState = messageState) {
                 LoginContent(
@@ -87,20 +94,27 @@ fun LoginScreen(
         state = oneTapState,
         clientId = CLIENT_ID,
         onTokenIdReceived = { tokenId ->
-            Log.d("Auth", tokenId)
-            onTokenIdReceived(tokenId)
+            val credential = GoogleAuthProvider.getCredential(tokenId, null)
+            FirebaseAuth.getInstance().signInWithCredential(credential)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        onSuccessfulFirebaseSignIn(tokenId)
+                    } else {
+                        task.exception?.let { onFailedFirebaseSignIn(it) }
+                    }
+                }
+            onSuccessfulFirebaseSignIn(tokenId)
         },
         onDialogDismissed = { message ->
             onDialogDismissed(message)
             messageState.addError(Exception(message))
         }
     )
-    LaunchedEffect( authenticated) {
+    LaunchedEffect(authenticated) {
         if (authenticated) {
             navigateToHome()
         }
     }
-
 
 
 }
@@ -117,16 +131,17 @@ private fun hasGoogleAccount(context: Context): Boolean {
 fun LoginScreenPreview() {
     VetMedTheme {
         LoginScreen(
-            authenticated =false,
+            authenticated = false,
             oneTapState = OneTapSignInState(),
             messageState = MessageBarState(),
             googleButtonLoadingState = false,
             onSignInButtonClick = {},
             onDialogDismissed = {},
-            onTokenIdReceived = {},
+            onSuccessfulFirebaseSignIn = {},
             navigateToHome = {},
             onGoogleAccountAdditionSuccess = {},
             onGoogleAccountAdditionUnSuccess = {},
+            onFailedFirebaseSignIn = {}
 
         )
 
