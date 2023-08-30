@@ -7,16 +7,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.vetmed.core.util.Screen
-import com.example.vetmed.feature_animal.domain.model.Animal
-import com.example.vetmed.feature_animal.domain.model.GalleryImage
-import com.example.vetmed.feature_animal.domain.model.GalleryState
-import com.example.vetmed.feature_animal.domain.model.rememberGalleryState
 import com.example.vetmed.feature_animal.presentation.add_animal.AddAnimal
 import com.example.vetmed.feature_animal.presentation.AnimalScreen
 import com.example.vetmed.feature_animal.presentation.AnimalViewModel

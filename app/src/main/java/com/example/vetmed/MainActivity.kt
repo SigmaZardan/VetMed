@@ -3,11 +3,6 @@ package com.example.vetmed
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
-import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
@@ -16,7 +11,6 @@ import com.example.vetmed.core.util.Screen
 import com.example.vetmed.core.util.navgraph.SetupNavGraph
 import com.example.vetmed.feature_animal.data.database.ImageToDeleteDao
 import com.example.vetmed.feature_animal.data.database.ImageToUploadDao
-import com.example.vetmed.feature_animal.data.repository.MongoDB
 import com.example.vetmed.feature_authentication.presentation.util.Constants.APP_ID
 import com.example.vetmed.ui.theme.VetMedTheme
 import com.google.firebase.FirebaseApp

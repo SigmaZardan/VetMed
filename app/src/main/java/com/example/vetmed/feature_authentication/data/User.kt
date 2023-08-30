@@ -1,4 +1,4 @@
-package com.example.vetmed.feature_animal.domain.model
+package com.example.vetmed.feature_authentication.data
 
 import com.example.vetmed.feature_animal.util.toRealmInstant
 import io.realm.kotlin.ext.realmListOf
@@ -9,12 +9,16 @@ import io.realm.kotlin.types.annotations.PrimaryKey
 import org.mongodb.kbson.ObjectId
 import java.time.Instant
 
-open class Animal : RealmObject {
+class User : RealmObject {
     @PrimaryKey
     var _id: ObjectId = ObjectId()
     var owner_id: String = ""
-    var animalName: String = ""
+    var userName: String = ""
+    var email: String = ""
+    var profile: String = ""
     var description: String = ""
-    var images: RealmList<String> = realmListOf()
+    var isVet: Boolean = false
+    var isAvailable: Boolean = false
+    var vetTickets: RealmList<String> = realmListOf()
     var date: RealmInstant = Instant.now().toRealmInstant()
 }

@@ -1,7 +1,6 @@
 package com.example.vetmed.core.util.navgraph
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
@@ -9,7 +8,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.vetmed.core.util.Screen
-import com.example.vetmed.feature_animal.data.repository.MongoDB
 import com.example.vetmed.feature_authentication.presentation.login.LoginScreen
 import com.example.vetmed.feature_authentication.presentation.login.LogInViewModel
 import com.example.vetmed.feature_home.presentation.home.HomeBase

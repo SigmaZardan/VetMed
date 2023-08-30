@@ -2,6 +2,7 @@ package com.example.vetmed.feature_animal.data.repository
 
 import com.example.vetmed.feature_animal.domain.model.Animal
 import com.example.vetmed.feature_animal.util.RequestState
+import com.example.vetmed.feature_authentication.data.User
 import com.example.vetmed.feature_authentication.presentation.util.Constants.APP_ID
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
@@ -32,11 +33,15 @@ object MongoDB : MongoRepository {
 
     override fun configureRealm() {
         if (user != null) {
-            val config = SyncConfiguration.Builder(user, setOf(Animal::class))
-                .initialSubscriptions() { sub ->
+            val config = SyncConfiguration.Builder(user, setOf(User::class, Animal::class))
+                .initialSubscriptions { sub ->
                     add(
-                        query = sub.query<Animal>("ownerId == $0", user.id),
+                        query = sub.query<Animal>("owner_id == $0", user.id),
                         name = "User's animal"
+                    )
+                    add(
+                        query = sub.query<User>("owner_id == $0", user.id),
+                        name = "Vetmed user"
                     )
                 }
                 .log(LogLevel.ALL)
@@ -49,7 +54,7 @@ object MongoDB : MongoRepository {
     override fun getAllAnimals(): Flow<Animals> {
         return if (user != null) {
             try {
-                realm.query<Animal>(query = "ownerId == $0", user.id)
+                realm.query<Animal>(query = "owner_id == $0", user.id)
                     .sort(property = "date", sortOrder = Sort.DESCENDING)
                     .asFlow()
                     .map { result ->
@@ -72,11 +77,31 @@ object MongoDB : MongoRepository {
         }
     }
 
+    override fun getAllVets(): Flow<Users> {
+        return if (user != null) {
+            try {
+                realm.query<User>(query = "isVet == $0", true)
+                    .asFlow().map { result ->
+                        RequestState.Success(
+                            data = result.list
+                        )
+                    }
+            } catch (e: Exception) {
+                flow { emit(RequestState.Error(e)) }
+            }
+
+        } else {
+            flow {
+                emit(RequestState.Error(UserNotAuthenticatedException()))
+            }
+        }
+    }
+
     override fun getFilteredAnimals(zonedDateTime: ZonedDateTime): Flow<Animals> {
         return if (user != null) {
             try {
                 realm.query<Animal>(
-                    "ownerId == $0 AND date < $1 AND date > $2",
+                    "owner_id == $0 AND date < $1 AND date > $2",
                     user.id,
                     RealmInstant.from(
                         LocalDateTime.of(
@@ -132,7 +157,7 @@ object MongoDB : MongoRepository {
         return if (user != null) {
             realm.write {
                 try {
-                    val addedAnimal = copyToRealm(animal.apply { ownerId = user.id })
+                    val addedAnimal = copyToRealm(animal.apply { owner_id = user.id })
                     RequestState.Success(data = addedAnimal)
                 } catch (e: Exception) {
                     RequestState.Error(e)
@@ -141,6 +166,23 @@ object MongoDB : MongoRepository {
         } else {
             RequestState.Error(UserNotAuthenticatedException())
         }
+    }
+
+
+    override suspend fun insertUser(user: User): RequestState<User> {
+        return if (MongoDB.user != null) {
+            realm.write {
+                try {
+                    val addedUser = copyToRealm(user.apply { owner_id = MongoDB.user.id })
+                    RequestState.Success(data = addedUser)
+                } catch (e: Exception) {
+                    RequestState.Error(e)
+                }
+            }
+        } else {
+            RequestState.Error(UserNotAuthenticatedException())
+        }
+
     }
 
     override suspend fun updateAnimal(animal: Animal): RequestState<Animal> {
@@ -166,7 +208,7 @@ object MongoDB : MongoRepository {
         return if (user != null) {
             realm.write {
                 val animal =
-                    query<Animal>(query = "_id == $0 AND ownerId == $1", id, user.id)
+                    query<Animal>(query = "_id == $0 AND owner_id == $1", id, user.id)
                         .first().find()
                 if (animal != null) {
                     try {
@@ -184,5 +226,5 @@ object MongoDB : MongoRepository {
         }
     }
 
-    private class UserNotAuthenticatedException : Exception("User is not logged int")
+    private class UserNotAuthenticatedException : Exception("User is not logged in")
 }

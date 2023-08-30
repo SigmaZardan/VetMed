@@ -24,8 +24,8 @@ import javax.inject.Inject
 class AnimalViewModel @Inject constructor(
     private val connectivity: NetworkConnectivityObserver
 ) : ViewModel() {
-    private lateinit var allDiariesJob: Job
-    private lateinit var filteredDiariesJob: Job
+    private lateinit var allAnimalsJob: Job
+    private lateinit var filteredAnimalsJob: Job
 
     var animals: MutableState<Animals> = mutableStateOf(RequestState.Idle)
     private var network by mutableStateOf(ConnectivityObserver.Status.Unavailable)
@@ -50,9 +50,9 @@ class AnimalViewModel @Inject constructor(
     }
 
     private fun observeAllAnimals() {
-        allDiariesJob = viewModelScope.launch {
-            if (::filteredDiariesJob.isInitialized) {
-                filteredDiariesJob.cancelAndJoin()
+        allAnimalsJob = viewModelScope.launch {
+            if (::filteredAnimalsJob.isInitialized) {
+                filteredAnimalsJob.cancelAndJoin()
             }
             MongoDB.getAllAnimals().collect { result ->
                 animals.value = result
@@ -61,9 +61,9 @@ class AnimalViewModel @Inject constructor(
     }
 
     private fun observeFilteredAnimals(zonedDateTime: ZonedDateTime) {
-        filteredDiariesJob = viewModelScope.launch {
-            if (::allDiariesJob.isInitialized) {
-                allDiariesJob.cancelAndJoin()
+        filteredAnimalsJob = viewModelScope.launch {
+            if (::allAnimalsJob.isInitialized) {
+                allAnimalsJob.cancelAndJoin()
             }
             MongoDB.getFilteredAnimals(zonedDateTime = zonedDateTime).collect { result ->
                 animals.value = result

@@ -3,17 +3,11 @@ package com.example.vetmed.feature_animal.connectivity
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
-import android.os.Build
-import androidx.annotation.RequiresApi
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class NetworkConnectivityObserver(context: Context): ConnectivityObserver {
     private val connectivityManager =
