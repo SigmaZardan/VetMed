@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.vetmed.core.util.BottomBarScreen
 import com.example.vetmed.feature_animal.presentation.AnimalBase
+import com.example.vetmed.feature_home.presentation.home.HomeScreen
 import com.example.vetmed.feature_profile.presentation.ProfileBase
 import com.example.vetmed.feature_vet.presentation.VetBase
 
@@ -37,11 +38,7 @@ fun NavGraphBuilder.home() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                "This is the home screen where the list of veterinarians should be displayed",
-                style = TextStyle(fontSize = MaterialTheme.typography.bodyMedium.fontSize),
-                color = MaterialTheme.colorScheme.onSurface
-            )
+          HomeScreen()
         }
     }
 

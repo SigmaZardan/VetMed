@@ -14,7 +14,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.vetmed"
+        applicationId "com.example.vetmedapp"
         minSdk 25
         targetSdk 33
         versionCode 1
