@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.vetmed.core.util.Screen
+import com.example.vetmed.feature_vet.presentation.VetScreen
 
 @Composable
 fun VetNavGraph(navController: NavHostController) {
@@ -20,6 +21,6 @@ fun VetNavGraph(navController: NavHostController) {
 
 fun NavGraphBuilder.vetRoute() {
     composable(route = Screen.Vet.route) {
-        Text("This is section for adding vets whose ticket you have bought")
+        VetScreen(onCallButtonClick = {})
     }
 }

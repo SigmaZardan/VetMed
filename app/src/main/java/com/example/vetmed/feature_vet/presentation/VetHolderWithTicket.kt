@@ -1,4 +1,4 @@
-package com.example.vetmed.feature_home.presentation.home.components
+package com.example.vetmed.feature_vet.presentation
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -35,26 +35,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.vetmed.R
 import com.example.vetmed.feature_authentication.data.User
 import com.example.vetmed.ui.theme.Elevation
-import org.mongodb.kbson.BsonObjectId
-import org.mongodb.kbson.serialization.Bson
 
 
 @Composable
-fun VetHolder(
+fun VetHolderWithTicket(
     vetUser: User,
     onCallButtonClick: (String) -> Unit
 ) {
 
     var isAvailable by remember { mutableStateOf(false) }
     isAvailable = vetUser.isAvailable
-    val buttonText = if (isAvailable) "BUY" else "BUSY"
+    val buttonText = if (isAvailable) "CALL" else "BUSY"
     Row {
 
         Surface(
@@ -152,19 +149,4 @@ fun VetHolder(
         }
 
     }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun VetHolderPreview() {
-    VetHolder(vetUser = User().apply {
-        userName = "Vet bibek"
-        email = "bibekbhujel@gmail.com"
-        description =
-            "He is just a man who is trying to do the best in his life , and he will loop after your pets in a good and organized way . he is experienced and he loves to spend time with his wife."
-
-    },
-        onCallButtonClick = {}
-    )
 }

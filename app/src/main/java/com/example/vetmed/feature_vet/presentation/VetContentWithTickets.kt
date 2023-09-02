@@ -1,4 +1,4 @@
-package com.example.vetmed.feature_home.presentation.home.components
+package com.example.vetmed.feature_vet.presentation
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -22,9 +22,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.vetmed.feature_animal.util.RequestState
 import com.example.vetmed.feature_authentication.data.User
+import com.example.vetmed.feature_home.presentation.home.components.EmptyUserPage
+import com.example.vetmed.feature_home.presentation.home.components.VetHolder
 
 @Composable
-fun VetContent(
+fun VetContentWithTickets(
     paddingValues: PaddingValues,
     vets: RequestState<List<User>>,
     onCallButtonClick: (String) -> Unit
@@ -39,7 +41,7 @@ fun VetContent(
                 .padding(bottom = 35.dp)
         ) {
             items(items = vets.data) {
-                VetHolder(
+                VetHolderWithTicket(
                     vetUser = it,
                     onCallButtonClick = onCallButtonClick)
                 Spacer(modifier = Modifier.padding(5.dp))
@@ -57,31 +59,10 @@ fun VetContent(
         }
 
     } else if (vets is RequestState.Error) {
-        Log.d("Vets", "VetContent: ${vets.error.message}")
+        Log.d("Vets", "VetContentWithTickets: ${vets.error.message}")
     } else {
         EmptyUserPage()
     }
 
 }
 
-@Composable
-fun EmptyUserPage(
-    title: String = "No Vets Found",
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(all = 24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = title,
-            style = TextStyle(
-                fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                fontWeight = FontWeight.Medium
-            )
-        )
-    }
-
-}

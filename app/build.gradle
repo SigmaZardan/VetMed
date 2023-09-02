@@ -52,10 +52,18 @@ android {
         }
     }
 }
+configurations {
+    configureEach {
+        resolutionStrategy {
+            // do not upgrade above 3.12.0 to support API < 21 while server uses
+            // COMPATIBLE_TLS, or okhttp3 is used in project
+            force 'com.khalti:khalti-android:2.01.00'
+        }
+    }
+}
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.8.0'
     implementation platform('org.jetbrains.kotlin:kotlin-bom:1.8.0')
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     implementation 'androidx.activity:activity-compose:1.5.1'
@@ -66,6 +74,8 @@ dependencies {
     implementation 'androidx.compose.material3:material3'
     implementation "androidx.compose.material:material:1.4.2"
     implementation 'androidx.wear.compose:compose-material:1.0.0-alpha19'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -130,5 +140,11 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:2.44.2"
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
 
+    implementation('com.khalti:khalti-android:2.01.00') {
+        transitive = true
+        exclude group: 'org.jetbrains.kotlinx', module: 'kotlinx-serialization-core-jvm'
+        exclude group: 'org.jetbrains.kotlinx', module: 'kotlinx-serialization-runtime-jvm'
+//        exclude group: 'com.android.support', module: 'support-compat'
+    }
 
 }
