@@ -1,10 +1,12 @@
 package com.example.vetmed.feature_animal.data.repository
 
+import android.app.DownloadManager.Request
 import com.example.vetmed.feature_animal.domain.model.Animal
 import com.example.vetmed.feature_animal.util.RequestState
 import com.example.vetmed.feature_authentication.data.User
 import com.example.vetmed.feature_authentication.presentation.util.Constants.APP_ID
 import io.realm.kotlin.Realm
+import io.realm.kotlin.ext.asFlow
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.log.LogLevel
 import io.realm.kotlin.mongodb.App
@@ -13,7 +15,9 @@ import io.realm.kotlin.query.Sort
 import io.realm.kotlin.types.RealmInstant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.flow.map
+import org.mongodb.kbson.BsonObjectId
 import org.mongodb.kbson.ObjectId
 import toInstant
 import java.time.LocalDateTime
@@ -34,14 +38,14 @@ object MongoDB : MongoRepository {
     override fun configureRealm() {
         if (user != null) {
             val config = SyncConfiguration.Builder(user, setOf(User::class, Animal::class))
-                .initialSubscriptions { sub ->
+                .initialSubscriptions(rerunOnOpen = true) { sub ->
                     add(
                         query = sub.query<Animal>("owner_id == $0", user.id),
                         name = "User's animal"
                     )
                     add(
-                        query = sub.query<User>("owner_id == $0", user.id),
-                        name = "Vetmed user"
+                        query = sub.query<User>("isVet == $0", true),
+                        name = "Vetmed user", updateExisting = true
                     )
                 }
                 .log(LogLevel.ALL)
@@ -94,6 +98,45 @@ object MongoDB : MongoRepository {
             flow {
                 emit(RequestState.Error(UserNotAuthenticatedException()))
             }
+        }
+    }
+
+    override fun getVetWithGivenId(id: BsonObjectId): RequestState<User> {
+        return if (user != null) {
+            try {
+                realm.query<User>(
+                    query = "_id == $0", id
+                ).find().first().let { result ->
+                    RequestState.Success(
+                        data = result
+                    )
+                }
+            } catch (e: Exception) {
+                RequestState.Error(e)
+            }
+        } else {
+            RequestState.Error(UserNotAuthenticatedException())
+        }
+
+    }
+
+    override fun getAllVetsWithTickets(): Flow<VetUsers> {
+        return if (user != null) {
+            try {
+                realm.query<User>(
+                    query = "owner_id == $0 AND isVet == $1", user.id, false
+                ).find().first().vetTickets.asFlow().map { result ->
+                    RequestState.Success(
+                        data = result.list
+                    )
+                }
+
+
+            } catch (e: Exception) {
+                flow { emit(RequestState.Error(e)) }
+            }
+        } else {
+            flow { emit(RequestState.Error(UserNotAuthenticatedException())) }
         }
     }
 
@@ -197,6 +240,24 @@ object MongoDB : MongoRepository {
                     RequestState.Success(data = queriedAnimal)
                 } else {
                     RequestState.Error(Exception("Queried Animal Doesn't Exist"))
+                }
+            }
+        } else {
+            RequestState.Error(UserNotAuthenticatedException())
+        }
+    }
+
+    override suspend fun updateUser(id: String): RequestState<Boolean> {
+        return if (user != null) {
+            realm.write {
+                val queriedUser =
+                    query<User>(query = "owner_id == $0 AND isVet == $1", user.id, false).first()
+                        .find()
+                if (queriedUser != null) {
+                    queriedUser.vetTickets.add(id)
+                    RequestState.Success(data = true)
+                } else {
+                    RequestState.Error(Exception("Queried Vet Doesn't Exist"))
                 }
             }
         } else {
