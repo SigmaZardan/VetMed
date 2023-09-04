@@ -35,9 +35,12 @@ class PaymentViewModel(
             if (result is RequestState.Success) {
                 // show some message saying the vet has been successfully added to your list or something like that
                 onSuccess()
+                Log.d("SuccessAddedVet", "addVetTickets: Success")
+
             } else if (result is RequestState.Error) {
                 // show the error that the vet cannot be added with the error message as well
                 onFailure(Exception(result.error.message))
+                Log.d("FailureVetAdded",   "${result.error.message}")
             }
         }
     }

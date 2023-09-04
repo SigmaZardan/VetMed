@@ -43,7 +43,8 @@ fun VetContentWithTickets(
             items(items = vets.data) {
                 VetHolderWithTicket(
                     vetUser = it,
-                    onCallButtonClick = onCallButtonClick)
+                    onCallButtonClick = onCallButtonClick
+                )
                 Spacer(modifier = Modifier.padding(5.dp))
             }
         }

@@ -1,8 +1,5 @@
 package com.example.vetmed.feature_payment.presentation
 
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -71,7 +68,6 @@ fun PaymentScreen(
                 )
                 Surface(
                     modifier = Modifier
-                        .clickable { onPayButtonClick() }
                         .padding(15.dp),
                     shape = Shapes().extraSmall,
                     border = BorderStroke(
@@ -84,12 +80,7 @@ fun PaymentScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(12.dp)
-                            .animateContentSize(
-                                animationSpec = tween(
-                                    durationMillis = 300,
-                                    easing = LinearOutSlowInEasing
-                                )
-                            ),
+                            .clickable { onPayButtonClick() },
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {

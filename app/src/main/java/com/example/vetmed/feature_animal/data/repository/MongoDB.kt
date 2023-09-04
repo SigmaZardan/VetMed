@@ -47,6 +47,11 @@ object MongoDB : MongoRepository {
                         query = sub.query<User>("isVet == $0", true),
                         name = "Vetmed user", updateExisting = true
                     )
+
+                    add(
+                        query = sub.query<User>("owner_id == $0", user.id),
+                        name = "Update only current user", updateExisting = true
+                    )
                 }
                 .log(LogLevel.ALL)
                 .build()
@@ -101,36 +106,37 @@ object MongoDB : MongoRepository {
         }
     }
 
-    override fun getVetWithGivenId(id: BsonObjectId): RequestState<User> {
+    override fun getVetWithGivenId(id: ObjectId): Flow<RequestState<User>> {
         return if (user != null) {
             try {
-                realm.query<User>(
-                    query = "_id == $0", id
-                ).find().first().let { result ->
-                    RequestState.Success(
-                        data = result
+                realm.query<User>(query = "_id == $0 AND isVet == $1", id, true).asFlow().map {
+                    RequestState.Success(data = it.list.first())
+                }
+
+            } catch (e: Exception) {
+                flow {
+                    emit(
+                        RequestState.Error(e)
                     )
                 }
-            } catch (e: Exception) {
-                RequestState.Error(e)
             }
         } else {
-            RequestState.Error(UserNotAuthenticatedException())
+            flow {
+                emit(RequestState.Error(UserNotAuthenticatedException()))
+            }
         }
-
     }
 
     override fun getAllVetsWithTickets(): Flow<VetUsers> {
         return if (user != null) {
             try {
                 realm.query<User>(
-                    query = "owner_id == $0 AND isVet == $1", user.id, false
+                    query = "owner_id == $0 ", user.id
                 ).find().first().vetTickets.asFlow().map { result ->
                     RequestState.Success(
                         data = result.list
                     )
                 }
-
 
             } catch (e: Exception) {
                 flow { emit(RequestState.Error(e)) }
@@ -212,12 +218,21 @@ object MongoDB : MongoRepository {
     }
 
 
-    override suspend fun insertUser(user: User): RequestState<User> {
+        override suspend fun insertUser(user: User): RequestState<User> {
         return if (MongoDB.user != null) {
+            // Search equality on the primary key field name
+            val userAlreadyPresent: User? = realm.query<User>("owner_id == $0", MongoDB.user.id).first().find()
+
             realm.write {
                 try {
-                    val addedUser = copyToRealm(user.apply { owner_id = MongoDB.user.id })
-                    RequestState.Success(data = addedUser)
+                    if (userAlreadyPresent == null) {
+                        val addedUser = copyToRealm(user.apply { owner_id = MongoDB.user.id })
+                        RequestState.Success(data = addedUser)
+                    }
+                    else {
+                        RequestState.Error(Exception("User already exits "))
+                    }
+
                 } catch (e: Exception) {
                     RequestState.Error(e)
                 }
@@ -227,6 +242,8 @@ object MongoDB : MongoRepository {
         }
 
     }
+
+
 
     override suspend fun updateAnimal(animal: Animal): RequestState<Animal> {
         return if (user != null) {
@@ -251,11 +268,17 @@ object MongoDB : MongoRepository {
         return if (user != null) {
             realm.write {
                 val queriedUser =
-                    query<User>(query = "owner_id == $0 AND isVet == $1", user.id, false).first()
+                    query<User>(query = "owner_id == $0 ", user.id).first()
                         .find()
                 if (queriedUser != null) {
-                    queriedUser.vetTickets.add(id)
-                    RequestState.Success(data = true)
+                    val vetIdToAdd = BsonObjectId.Companion.invoke(id).toHexString()
+                    if (!queriedUser.vetTickets.contains(vetIdToAdd)) {
+                        queriedUser.vetTickets.add(vetIdToAdd)
+                        RequestState.Success(data = true)
+                    } else {
+                        // Vet ID already exists in the list, do nothing
+                        RequestState.Success(data = false)
+                    }
                 } else {
                     RequestState.Error(Exception("Queried Vet Doesn't Exist"))
                 }
@@ -264,6 +287,7 @@ object MongoDB : MongoRepository {
             RequestState.Error(UserNotAuthenticatedException())
         }
     }
+
 
     override suspend fun deleteAnimal(id: ObjectId): RequestState<Animal> {
         return if (user != null) {

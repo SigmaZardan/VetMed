@@ -105,11 +105,6 @@ fun VetHolder(
                     modifier = Modifier.padding(10.dp)
                 ) {
                     Surface(
-                        modifier = Modifier.clickable(enabled = isAvailable) {
-                            onCallButtonClick(
-                                vetUser._id.toString()
-                            )
-                        },
                         shape = Shapes().extraSmall,
                         border = BorderStroke(
                             width = 1.dp,
@@ -127,7 +122,8 @@ fun VetHolder(
                                         durationMillis = 300,
                                         easing = LinearOutSlowInEasing
                                     )
-                                ),
+                                )
+                                .clickable(enabled = isAvailable) { onCallButtonClick(vetUser._id.toHexString()) },
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center,
                         ) {

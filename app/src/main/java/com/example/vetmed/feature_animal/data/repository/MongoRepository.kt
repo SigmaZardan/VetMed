@@ -19,7 +19,7 @@ interface MongoRepository {
     fun getAllAnimals(): Flow<Animals>
     fun getAllVets(): Flow<Users>
     fun getAllVetsWithTickets(): Flow<VetUsers>
-    fun getVetWithGivenId(id: BsonObjectId): RequestState<User>
+    fun getVetWithGivenId(id: BsonObjectId): Flow<RequestState<User>>
     fun getFilteredAnimals(zonedDateTime: ZonedDateTime): Flow<Animals>
     fun getSelectedAnimal(animalId: ObjectId): Flow<RequestState<Animal>>
     suspend fun insertAnimal(animal: Animal): RequestState<Animal>

@@ -117,7 +117,6 @@ fun NavGraphBuilder.paymentScreen(
                 val khaltiCheckOut = KhaltiCheckOut(context, config)
                 khaltiCheckOut.show()
             })
-
         Button(onClick = { paymentViewModel.addVetTickets(onSuccess = {}, onFailure = {}) }) {
 
         }
