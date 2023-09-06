@@ -23,11 +23,11 @@ class HomeViewModel(
 ) {
 
     var users: MutableState<Users> = mutableStateOf(RequestState.Idle)
+    var isVet: MutableState<Boolean> = mutableStateOf(false)
 
     init {
         getAllVets()
-
-
+        isVet()
     }
 
     private fun getAllVets() {
@@ -43,4 +43,22 @@ class HomeViewModel(
 
         }
     }
+
+    private fun isVet() {
+        viewModelScope.launch {
+            val result = try {
+                MongoDB.isVet() // Assuming this is a suspend function
+            } catch (e: Exception) {
+                RequestState.Error(e)
+            }
+
+            when (result) {
+                is RequestState.Success -> isVet.value = result.data
+                is RequestState.Error -> Log.d("VetOrNot", "isVet: ${result.error.message}")
+                else -> {}
+            }
+        }
+    }
+
+
 }

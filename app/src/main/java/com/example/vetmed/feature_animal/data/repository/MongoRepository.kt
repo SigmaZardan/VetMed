@@ -25,6 +25,7 @@ interface MongoRepository {
     suspend fun insertAnimal(animal: Animal): RequestState<Animal>
     suspend fun insertUser(user: User): RequestState<User>
     suspend fun updateAnimal(animal: Animal): RequestState<Animal>
-    suspend fun updateUser(id: String):RequestState<Boolean>
+    suspend fun updateUser(id: String): RequestState<Boolean>
+    suspend fun isVet(): RequestState<Boolean>
     suspend fun deleteAnimal(id: ObjectId): RequestState<Animal>
 }

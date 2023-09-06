@@ -6,6 +6,7 @@ import android.widget.Toast
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
@@ -20,6 +21,7 @@ import com.example.vetmed.core.util.Screen
 import com.example.vetmed.feature_animal.presentation.AnimalBase
 import com.example.vetmed.feature_authentication.presentation.util.Constants.TEST_KEY
 import com.example.vetmed.feature_home.presentation.home.HomeScreen
+import com.example.vetmed.feature_home.presentation.home.HomeViewModel
 import com.example.vetmed.feature_payment.presentation.PaymentScreen
 import com.example.vetmed.feature_payment.presentation.PaymentViewModel
 import com.example.vetmed.feature_profile.presentation.ProfileBase
@@ -55,12 +57,20 @@ fun NavGraphBuilder.home(
     navigateToPaymentScreenWithArgs: (String) -> Unit
 ) {
     composable(route = BottomBarScreen.Home.route) {
-
+        val homeViewModel: HomeViewModel = viewModel()
+        val isVet = homeViewModel.isVet
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            HomeScreen(onCallButtonClick = navigateToPaymentScreenWithArgs)
+
+            if (isVet.value) {
+                Text("this is for the vets")
+            }
+            else {
+                HomeScreen(onCallButtonClick = navigateToPaymentScreenWithArgs)
+            }
+
         }
     }
 

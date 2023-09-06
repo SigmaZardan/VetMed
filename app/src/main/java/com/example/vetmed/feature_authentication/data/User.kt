@@ -15,10 +15,12 @@ class User : RealmObject {
     var owner_id: String = ""
     var userName: String = ""
     var email: String = ""
+    var address: String? = ""
     var profile: String = ""
     var description: String = ""
     var isVet: Boolean = false
     var isAvailable: Boolean = false
     var vetTickets: RealmList<String> = realmListOf()
     var date: RealmInstant = Instant.now().toRealmInstant()
+    var appointments: RealmList<String> = realmListOf()
 }

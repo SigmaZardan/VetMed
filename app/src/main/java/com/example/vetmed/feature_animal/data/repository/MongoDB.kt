@@ -1,6 +1,7 @@
 package com.example.vetmed.feature_animal.data.repository
 
 import android.app.DownloadManager.Request
+import android.util.Log
 import com.example.vetmed.feature_animal.domain.model.Animal
 import com.example.vetmed.feature_animal.util.RequestState
 import com.example.vetmed.feature_authentication.data.User
@@ -218,18 +219,18 @@ object MongoDB : MongoRepository {
     }
 
 
-        override suspend fun insertUser(user: User): RequestState<User> {
+    override suspend fun insertUser(user: User): RequestState<User> {
         return if (MongoDB.user != null) {
             // Search equality on the primary key field name
-            val userAlreadyPresent: User? = realm.query<User>("owner_id == $0", MongoDB.user.id).first().find()
+            val userAlreadyPresent: User? =
+                realm.query<User>("owner_id == $0", MongoDB.user.id).first().find()
 
             realm.write {
                 try {
                     if (userAlreadyPresent == null) {
                         val addedUser = copyToRealm(user.apply { owner_id = MongoDB.user.id })
                         RequestState.Success(data = addedUser)
-                    }
-                    else {
+                    } else {
                         RequestState.Error(Exception("User already exits "))
                     }
 
@@ -242,7 +243,6 @@ object MongoDB : MongoRepository {
         }
 
     }
-
 
 
     override suspend fun updateAnimal(animal: Animal): RequestState<Animal> {
@@ -283,6 +283,23 @@ object MongoDB : MongoRepository {
                     RequestState.Error(Exception("Queried Vet Doesn't Exist"))
                 }
             }
+        } else {
+            RequestState.Error(UserNotAuthenticatedException())
+        }
+    }
+
+    override suspend fun isVet(): RequestState<Boolean> {
+        return if (user != null) {
+            // check if the logged in user is a vet or not
+            // get the user based on the id
+            val queriedUser = realm.query<User>(query = "owner_id == $0", user.id).first().find()
+            if (queriedUser != null) {
+                Log.d("IsVet", "isVet:${queriedUser.isVet}")
+                RequestState.Success(queriedUser.isVet)
+            } else {
+                RequestState.Error(Exception("User cannot be fetched"))
+            }
+
         } else {
             RequestState.Error(UserNotAuthenticatedException())
         }
