@@ -22,7 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.vetmed.feature_animal.util.RequestState
 import com.example.vetmed.feature_authentication.data.User
-import com.example.vetmed.feature_home.presentation.home.components.EmptyUserPage
+import com.example.vetmed.feature_home.presentation.home.EmptyUserPage
 import com.example.vetmed.feature_home.presentation.home.components.VetHolder
 
 @Composable

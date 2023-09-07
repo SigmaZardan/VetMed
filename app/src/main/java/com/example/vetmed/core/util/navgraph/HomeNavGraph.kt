@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -19,6 +20,10 @@ import androidx.wear.compose.material.Button
 import com.example.vetmed.core.util.BottomBarScreen
 import com.example.vetmed.core.util.Screen
 import com.example.vetmed.feature_animal.presentation.AnimalBase
+import com.example.vetmed.feature_animal.util.RequestState
+import com.example.vetmed.feature_appointment.AppointmentScreen
+import com.example.vetmed.feature_appointment.AppointmentViewModel
+import com.example.vetmed.feature_authentication.data.User
 import com.example.vetmed.feature_authentication.presentation.util.Constants.TEST_KEY
 import com.example.vetmed.feature_home.presentation.home.HomeScreen
 import com.example.vetmed.feature_home.presentation.home.HomeViewModel
@@ -58,19 +63,22 @@ fun NavGraphBuilder.home(
 ) {
     composable(route = BottomBarScreen.Home.route) {
         val homeViewModel: HomeViewModel = viewModel()
+        val appointmentViewModel: AppointmentViewModel = viewModel()
         val isVet = homeViewModel.isVet
+        val vets by homeViewModel.vets
+        val users by appointmentViewModel.users
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             if (isVet.value) {
-                Text("this is for the vets")
+                AppointmentScreen(
+                    users = users,
+                    onCallButtonClick = {}
+                )
+            } else {
+                HomeScreen(onCallButtonClick = navigateToPaymentScreenWithArgs, vets = vets)
             }
-            else {
-                HomeScreen(onCallButtonClick = navigateToPaymentScreenWithArgs)
-            }
-
         }
     }
 
@@ -127,7 +135,9 @@ fun NavGraphBuilder.paymentScreen(
                 val khaltiCheckOut = KhaltiCheckOut(context, config)
                 khaltiCheckOut.show()
             })
-        Button(onClick = { paymentViewModel.addVetTickets(onSuccess = {}, onFailure = {}) }) {
+        Button(onClick = {
+            paymentViewModel.addVetTickets(onSuccess = {}, onFailure = {})
+        }) {
 
         }
 

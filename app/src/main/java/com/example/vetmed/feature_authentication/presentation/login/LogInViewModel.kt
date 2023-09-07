@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vetmed.feature_animal.data.repository.MongoDB
 import com.example.vetmed.feature_animal.util.RequestState
+import com.example.vetmed.feature_animal.util.toRealmInstant
 import com.example.vetmed.feature_authentication.presentation.util.Constants
 import com.example.vetmed.feature_authentication.presentation.util.Constants.APP_ID
 import com.example.vetmed.feature_profile.domain.model.User
@@ -17,12 +18,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.Instant
+import kotlin.time.Duration.Companion.seconds
 
 class LogInViewModel : ViewModel() {
     var authenticated = mutableStateOf(false)
         private set
     var loadingState = mutableStateOf(false)
         private set
+
 
     fun setLoading(loading: Boolean) {
         loadingState.value = loading
@@ -71,6 +75,7 @@ class LogInViewModel : ViewModel() {
                 userName = userInfo.name
                 email = userInfo.email
                 profile = userInfo.picture
+                date = Instant.now().toRealmInstant()
             })
 
         if (result is RequestState.Success) {

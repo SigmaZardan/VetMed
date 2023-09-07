@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.flow.map
+import okhttp3.internal.wait
 import org.mongodb.kbson.BsonObjectId
 import org.mongodb.kbson.ObjectId
 import toInstant
@@ -53,6 +54,11 @@ object MongoDB : MongoRepository {
                         query = sub.query<User>("owner_id == $0", user.id),
                         name = "Update only current user", updateExisting = true
                     )
+                    add(
+                        query = sub.query<User>("isVet == $0", false),
+                        name = "Users who are not bet", updateExisting = true
+                    )
+
                 }
                 .log(LogLevel.ALL)
                 .build()
@@ -244,7 +250,6 @@ object MongoDB : MongoRepository {
 
     }
 
-
     override suspend fun updateAnimal(animal: Animal): RequestState<Animal> {
         return if (user != null) {
             realm.write {
@@ -287,6 +292,29 @@ object MongoDB : MongoRepository {
             RequestState.Error(UserNotAuthenticatedException())
         }
     }
+
+    // when you update user based on the addition of the vets into vetTickets similarly we have to update the
+    // vet with the user who asked for appointment
+    override suspend fun getAllUsers(): Flow<Users> {
+        return if (user != null) {
+            try {
+                val queriedVet = realm.query<User>(query = "owner_id == $0", user.id).first().find()
+                realm.query<User>(query = "isVet == $0", false).asFlow().map { result ->
+                    Log.d("CheckingUsers", "getAllUsers: ${result.list.size}")
+                    val listOfUsers =
+                        result.list.filter { it.vetTickets.contains(queriedVet?._id?.toHexString()) }
+                    RequestState.Success(data = listOfUsers)
+                }
+            } catch (e: Exception) {
+                flow { emit(RequestState.Error(e)) }
+            }
+        } else {
+            flow {
+                emit(RequestState.Error(UserNotAuthenticatedException()))
+            }
+        }
+    }
+
 
     override suspend fun isVet(): RequestState<Boolean> {
         return if (user != null) {

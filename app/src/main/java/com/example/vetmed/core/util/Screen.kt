@@ -14,6 +14,8 @@ sealed class Screen(val route: String) {
         route = "payment_screen?$PAYMENT_SCREEN_ARGUMENT_KEY=" +
                 "{$PAYMENT_SCREEN_ARGUMENT_KEY}"
     ) {
+
+
         fun passVetId(vetId: String) =
             "payment_screen?$PAYMENT_SCREEN_ARGUMENT_KEY=$vetId"
 

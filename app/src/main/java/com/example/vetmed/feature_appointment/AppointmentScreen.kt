@@ -1,7 +1,5 @@
-package com.example.vetmed.feature_home.presentation.home
+package com.example.vetmed.feature_appointment
 
-
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,11 +13,9 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,31 +23,28 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.vetmed.R
 import com.example.vetmed.feature_animal.data.repository.Users
 import com.example.vetmed.feature_animal.presentation.components.EmptyPage
 import com.example.vetmed.feature_animal.util.RequestState
+import com.example.vetmed.feature_appointment.components.AppointmentContent
 import com.example.vetmed.feature_authentication.data.User
 import com.example.vetmed.feature_home.presentation.home.components.VetContent
 
-private const val TAG = "HomeScreen"
-
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(
+fun AppointmentScreen(
     onCallButtonClick: (String) -> Unit,
-    vets: Users
+    users: Users
 ) {
     Scaffold(
         topBar = { VetTopBar() },
         content = {
-            when (vets) {
+            when (users) {
                 is RequestState.Success -> {
-                    VetContent(
+                    AppointmentContent(
                         paddingValues = it,
-                        vets = vets.data,
+                        users = users.data,
                         onCallButtonClick = onCallButtonClick
                     )
                 }
@@ -59,7 +52,7 @@ fun HomeScreen(
                 is RequestState.Error -> {
                     EmptyPage(
                         title = "Error",
-                        subtitle = "${vets.error.message}"
+                        subtitle = "${users.error.message}"
                     )
                 }
 
@@ -101,7 +94,7 @@ fun VetTopBar(
                 )
                 Spacer(modifier = Modifier.width(5.dp))
 
-                Text("Vets")
+                Text("My Appointments")
             }
         },
     )
@@ -129,39 +122,18 @@ fun EmptyUserPage(
 
 }
 
-val userList = mutableListOf(
+val appointments = mutableListOf(
     User().apply {
-        userName = "Alice"
-        email = "alice@example.com"
+        userName = "Sanzeena"
+        email = "sanzeena@gmail.com"
         profile = ""
         description = "I'm a pet lover and a veterinarian."
-        isVet = true
-        isAvailable = true
     },
     User().apply {
-        userName = "Bob"
-        email = "bob@example.com"
+        userName = "Bibek"
+        email = "bibekbhujel077@gmail.com"
         profile = ""
         description = "I'm a pet owner and a dog trainer."
-        isVet = false
-        isAvailable = true
     },
-    User().apply {
-        userName = "Cindy"
-        email = "cindy@example.com"
-        profile = ""
-        description = "I'm a pet owner and a cat lover."
-        isVet = false
-        isAvailable = false
-    },
-    User().apply {
-        userName = "Dan"
-        email = "dan@example.com"
-        profile = ""
-        description = "I'm a pet owner and a bird watcher."
-        isVet = false
-        isAvailable = true
-    }
-)
 
-
+    )

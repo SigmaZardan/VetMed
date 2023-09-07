@@ -28,4 +28,5 @@ interface MongoRepository {
     suspend fun updateUser(id: String): RequestState<Boolean>
     suspend fun isVet(): RequestState<Boolean>
     suspend fun deleteAnimal(id: ObjectId): RequestState<Animal>
+    suspend fun getAllUsers(): Flow<Users>
 }
