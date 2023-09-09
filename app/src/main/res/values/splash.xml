@@ -2,7 +2,7 @@
 <resources>
     <style name = "Theme.VetMed.MySplash" parent = "Theme.SplashScreen">
         <item name="windowSplashScreenBackground">#FBFCFF</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/group_1</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/app_icon</item>
         <item name="postSplashScreenTheme">@style/Theme.VetMed</item>
     </style>
 </resources>

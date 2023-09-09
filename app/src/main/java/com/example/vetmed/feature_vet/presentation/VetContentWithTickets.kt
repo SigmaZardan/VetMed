@@ -41,7 +41,7 @@ fun VetContentWithTickets(
                 .navigationBarsPadding()
                 .padding(bottom = 35.dp)
         ) {
-            items(items = userList) {
+            items(items = vets.data) {
                 VetHolderWithTicket(
                     vetUser = it,
                     onCallButtonClick = onCallButtonClick

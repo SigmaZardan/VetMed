@@ -59,7 +59,7 @@ fun VetTopBar(
                 )
                 Spacer(modifier = Modifier.width(5.dp))
 
-                Text("Vets")
+                Text("My Vets" )
             }
         },
     )
