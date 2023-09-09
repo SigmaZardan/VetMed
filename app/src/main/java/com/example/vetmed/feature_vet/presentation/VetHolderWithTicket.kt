@@ -49,9 +49,6 @@ fun VetHolderWithTicket(
     onCallButtonClick: (String) -> Unit
 ) {
 
-    var isAvailable by remember { mutableStateOf(false) }
-    isAvailable = vetUser.isAvailable
-    val buttonText = if (isAvailable) "CALL" else "BUSY"
     Row {
 
         Surface(
@@ -102,9 +99,9 @@ fun VetHolderWithTicket(
                     modifier = Modifier.padding(10.dp)
                 ) {
                     Surface(
-                        modifier = Modifier.clickable(enabled = isAvailable) {
+                        modifier = Modifier.clickable{
                             onCallButtonClick(
-                                vetUser._id.toString()
+                                vetUser._id.toHexString()
                             )
                         },
                         shape = Shapes().extraSmall,
@@ -137,7 +134,7 @@ fun VetHolderWithTicket(
 
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                text = buttonText,
+                                text = "JOIN",
                                 style = TextStyle(fontSize = MaterialTheme.typography.bodyMedium.fontSize)
                             )
                         }

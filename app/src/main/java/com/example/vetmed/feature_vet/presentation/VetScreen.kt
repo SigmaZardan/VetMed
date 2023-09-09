@@ -65,37 +65,3 @@ fun VetTopBar(
     )
 }
 
-val userList = mutableListOf(
-    User().apply {
-        userName = "Alice"
-        email = "alice@example.com"
-        profile = ""
-        description = "I'm a pet lover and a veterinarian."
-        isVet = true
-        isAvailable = true
-    },
-    User().apply {
-        userName = "Bob"
-        email = "bob@example.com"
-        profile = ""
-        description = "I'm a pet owner and a dog trainer."
-        isVet = false
-        isAvailable = true
-    },
-    User().apply {
-        userName = "Cindy"
-        email = "cindy@example.com"
-        profile = ""
-        description = "I'm a pet owner and a cat lover."
-        isVet = false
-        isAvailable = false
-    },
-    User().apply {
-        userName = "Dan"
-        email = "dan@example.com"
-        profile = ""
-        description = "I'm a pet owner and a bird watcher."
-        isVet = false
-        isAvailable = true
-    }
-)

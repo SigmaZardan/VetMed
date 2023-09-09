@@ -315,6 +315,74 @@ object MongoDB : MongoRepository {
         }
     }
 
+    override suspend fun addRoom(roomName: String, userId: String): RequestState<Boolean> {
+        return if (user != null) {
+            realm.write {
+                val id = BsonObjectId.Companion.invoke(userId)
+                val queriedUser =
+                    query<User>(query = "_id == $0", id)
+                        .first().find()
+                if (queriedUser != null) {
+                    try {
+                        queriedUser.room = roomName
+                        RequestState.Success(true)
+                    } catch (e: Exception) {
+                        RequestState.Error(e)
+                    }
+                } else {
+                    RequestState.Error(Exception("User does not exist."))
+                }
+            }
+        } else {
+            RequestState.Error(UserNotAuthenticatedException())
+        }
+    }
+
+    override suspend fun getRoom(userId: String): RequestState<String> {
+        return if (user != null) {
+            try {
+                val id = BsonObjectId.Companion.invoke(userId)
+                val queriedUser = realm.query<User>(query = "_id == $0",id).first().find()
+                if (queriedUser != null) {
+                    RequestState.Success(queriedUser.room)
+                }
+                else {
+                    RequestState.Error(Exception("Not found"))
+                }
+
+            } catch (e: Exception) {
+                RequestState.Error(e)
+            }
+        } else {
+            RequestState.Error(UserNotAuthenticatedException())
+        }
+    }
+
+
+    override suspend fun deleteRoom(userId: String): RequestState<Boolean> {
+        return if (user != null) {
+            realm.write {
+                val id = BsonObjectId.Companion.invoke(userId)
+                val queriedUser =
+                    query<User>(query = "_id == $0", id)
+                        .first().find()
+
+                if (queriedUser != null) {
+                    try {
+                        queriedUser.room = ""
+                        RequestState.Success(true)
+                    } catch (e: Exception) {
+                        RequestState.Error(e)
+                    }
+                } else {
+                    RequestState.Error(Exception("User does not exist."))
+                }
+            }
+        } else {
+            RequestState.Error(UserNotAuthenticatedException())
+        }
+    }
+
 
     override suspend fun isVet(): RequestState<Boolean> {
         return if (user != null) {

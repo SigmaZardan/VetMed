@@ -29,4 +29,7 @@ interface MongoRepository {
     suspend fun isVet(): RequestState<Boolean>
     suspend fun deleteAnimal(id: ObjectId): RequestState<Animal>
     suspend fun getAllUsers(): Flow<Users>
+    suspend fun addRoom(roomName: String, userId: String): RequestState<Boolean>
+    suspend fun deleteRoom(userId: String): RequestState<Boolean>
+    suspend fun getRoom(userId:String): RequestState<String>
 }

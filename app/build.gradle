@@ -102,7 +102,7 @@ dependencies {
 
 
     // Message Bar Compose
-        implementation 'com.github.stevdza-san:MessageBarCompose:1.0.5'
+    implementation 'com.github.stevdza-san:MessageBarCompose:1.0.5'
 
     // Date-Time Picker
     implementation 'com.maxkeppeler.sheets-compose-dialogs:core:1.0.2'
@@ -146,5 +146,12 @@ dependencies {
         exclude group: 'org.jetbrains.kotlinx', module: 'kotlinx-serialization-runtime-jvm'
 //        exclude group: 'com.android.support', module: 'support-compat'
     }
+
+
+    implementation('com.github.AgoraIO-Community.VideoUIKit-Android:final:4.0.1') {
+        // Exclude debug-specific dependencies
+        exclude group: 'com.github.AgoraIO-Community.VideoUIKit-Android', module: 'final-debug'
+    }
+
 
 }

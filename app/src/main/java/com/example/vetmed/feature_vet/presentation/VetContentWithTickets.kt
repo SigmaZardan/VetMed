@@ -24,6 +24,7 @@ import com.example.vetmed.feature_animal.util.RequestState
 import com.example.vetmed.feature_authentication.data.User
 import com.example.vetmed.feature_home.presentation.home.EmptyUserPage
 import com.example.vetmed.feature_home.presentation.home.components.VetHolder
+import org.mongodb.kbson.BsonObjectId
 
 @Composable
 fun VetContentWithTickets(
@@ -40,7 +41,7 @@ fun VetContentWithTickets(
                 .navigationBarsPadding()
                 .padding(bottom = 35.dp)
         ) {
-            items(items = vets.data) {
+            items(items = userList) {
                 VetHolderWithTicket(
                     vetUser = it,
                     onCallButtonClick = onCallButtonClick
@@ -66,4 +67,34 @@ fun VetContentWithTickets(
     }
 
 }
+
+val userList = mutableListOf(
+    User().apply {
+        _id = org.mongodb.kbson.ObjectId("64fbbc7b4f973154d3781068")
+        userName = "Alice"
+        email = "alice@example.com"
+        profile = ""
+        description = "I'm a pet lover and a veterinarian."
+    },
+    User().apply {
+        userName = "Bob"
+        email = "bob@example.com"
+        profile = ""
+        description = "I'm a pet owner and a dog trainer."
+        isVet = false
+        isAvailable = true
+    },
+    User().apply {
+        userName = "Cindy"
+        email = "cindy@example.com"
+        profile = ""
+        description = "I'm a pet owner and a cat lover."
+    },
+    User().apply {
+        userName = "Dan"
+        email = "dan@example.com"
+        profile = ""
+        description = "I'm a pet owner and a bird watcher."
+    }
+)
 

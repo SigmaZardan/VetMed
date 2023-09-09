@@ -64,7 +64,7 @@ class LogInViewModel : ViewModel() {
     }
 
 
-    suspend fun insertUser() {
+     private suspend fun insertUser() {
         val currentUser = App.create(APP_ID).currentUser
         val userProfileJsonString = currentUser?.profileAsBsonDocument()?.toJson()
         val gson = Gson()

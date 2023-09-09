@@ -53,12 +53,12 @@ fun LoginContent(
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = "This place will contain  the username section",
+                    text = "LOGIN WITH GOOGLE",
                     fontSize = MaterialTheme.typography.titleLarge.fontSize
                 )
                 Text(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
-                    text = "This place will contain the password section for logging in",
+                    text = "One Tap Sign In",
                     fontSize = MaterialTheme.typography.bodyMedium.fontSize
                 )
             }

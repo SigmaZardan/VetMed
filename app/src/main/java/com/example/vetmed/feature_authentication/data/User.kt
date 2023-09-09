@@ -23,4 +23,5 @@ class User : RealmObject {
     var vetTickets: RealmList<String> = realmListOf()
     var date: RealmInstant = Instant.now().toRealmInstant()
     var appointments: RealmList<String> = realmListOf()
+    var room: String = ""
 }
